@@ -13,8 +13,13 @@
     "windows": [
       {
         "title": "todotauri",
-        "width": 800,
-        "height": 600
+        "width": 300,
+        "height": 200,
+        "transparent": true,
+        "decorations": false,
+        "resizable": true,
+        "minWidth": 250,
+        "minHeight": 150
       }
     ],
     "security": {
