@@ -15,7 +15,6 @@
         "title": "todotauri",
         "width": 300,
         "height": 200,
-        "transparent": true,
         "decorations": false,
         "resizable": true,
         "minWidth": 250,
