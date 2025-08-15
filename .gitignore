@@ -12,6 +12,13 @@ dist
 dist-ssr
 *.local
 
+# Rust/Cargo
+target/
+Cargo.lock
+
+# Tauri
+src-tauri/target/
+
 # Editor directories and files
 .vscode/*
 !.vscode/extensions.json
