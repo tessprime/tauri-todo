@@ -5,12 +5,42 @@ import "./App.css";
 
 function App() {
   const [tasks, setTasks] = useState<Model[]>([]);
+  const [editingTaskId, setEditingTaskId] = useState<number | null>(null);
+  const [editText, setEditText] = useState<string>("");
   const containerRef = useRef<HTMLDivElement>(null);
 
   const toggleTask = (id: number) => {
     setTasks(tasks.map(task => 
       task.id === id ? { ...task, status: task.status === "completed" ? "pending" : "completed" } : task
     ));
+  };
+
+  const startEdit = (id: number, currentText: string) => {
+    setEditingTaskId(id);
+    setEditText(currentText);
+  };
+
+  const cancelEdit = () => {
+    setEditingTaskId(null);
+    setEditText("");
+  };
+
+  const saveEdit = (id: number) => {
+    if (editText.trim()) {
+      setTasks(tasks.map(task => 
+        task.id === id ? { ...task, text: editText.trim() } : task
+      ));
+    }
+    setEditingTaskId(null);
+    setEditText("");
+  };
+
+  const handleKeyPress = (e: React.KeyboardEvent, id: number) => {
+    if (e.key === 'Enter') {
+      saveEdit(id);
+    } else if (e.key === 'Escape') {
+      cancelEdit();
+    }
   };
 
   const closeApp = async () => {
@@ -87,9 +117,27 @@ function App() {
                 checked={task.status === "completed"}
                 onChange={() => toggleTask(task.id)}
               />
-              <label htmlFor={`task-${task.id}`} className={task.status === "completed" ? 'completed' : ''}>
-                {task.text}
-              </label>
+              {editingTaskId === task.id ? (
+                <div className="edit-container">
+                  <input
+                    type="text"
+                    value={editText}
+                    onChange={(e) => setEditText(e.target.value)}
+                    onKeyDown={(e) => handleKeyPress(e, task.id)}
+                    className="edit-input"
+                    autoFocus
+                  />
+                  <button onClick={() => saveEdit(task.id)} className="save-button">✓</button>
+                  <button onClick={cancelEdit} className="cancel-button">✕</button>
+                </div>
+              ) : (
+                <div className="task-content">
+                  <label htmlFor={`task-${task.id}`} className={task.status === "completed" ? 'completed' : ''}>
+                    {task.text}
+                  </label>
+                  <button onClick={() => startEdit(task.id, task.text)} className="edit-button">✏️</button>
+                </div>
+              )}
             </div>
           ))}
         </div>
