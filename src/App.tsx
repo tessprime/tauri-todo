@@ -1,7 +1,8 @@
 import { useState, useEffect, useRef } from "react";
 import { getCurrentWindow, LogicalSize } from "@tauri-apps/api/window";
-import { commands, type Model } from "./bindings";
+import { type Model } from "./bindings";
 import TaskContainer from "./components/TaskContainer";
+import { TasksService } from "./services/TasksService";
 import "./App.css";
 
 function App() {
@@ -49,13 +50,8 @@ function App() {
   useEffect(() => {
     const loadTasks = async () => {
       try {
-        const result = await commands.getAllTasks();
-        if (result.status === "ok") {
-          setTasks(result.data);
-          console.log(result.data);
-        } else {
-          console.error("Failed to load tasks:", result.error);
-        }
+        const tasks = await TasksService.getAllTasks();
+        setTasks(tasks);
       } catch (error) {
         console.error("Error loading tasks:", error);
       }
