@@ -1,47 +1,13 @@
 import { useState, useEffect, useRef } from "react";
 import { getCurrentWindow, LogicalSize } from "@tauri-apps/api/window";
 import { commands, type Model } from "./bindings";
+import TaskContainer from "./components/TaskContainer";
 import "./App.css";
 
 function App() {
   const [tasks, setTasks] = useState<Model[]>([]);
-  const [editingTaskId, setEditingTaskId] = useState<number | null>(null);
-  const [editText, setEditText] = useState<string>("");
   const containerRef = useRef<HTMLDivElement>(null);
 
-  const toggleTask = (id: number) => {
-    setTasks(tasks.map(task => 
-      task.id === id ? { ...task, status: task.status === "completed" ? "pending" : "completed" } : task
-    ));
-  };
-
-  const startEdit = (id: number, currentText: string) => {
-    setEditingTaskId(id);
-    setEditText(currentText);
-  };
-
-  const cancelEdit = () => {
-    setEditingTaskId(null);
-    setEditText("");
-  };
-
-  const saveEdit = (id: number) => {
-    if (editText.trim()) {
-      setTasks(tasks.map(task => 
-        task.id === id ? { ...task, text: editText.trim() } : task
-      ));
-    }
-    setEditingTaskId(null);
-    setEditText("");
-  };
-
-  const handleKeyPress = (e: React.KeyboardEvent, id: number) => {
-    if (e.key === 'Enter') {
-      saveEdit(id);
-    } else if (e.key === 'Escape') {
-      cancelEdit();
-    }
-  };
 
   const closeApp = async () => {
     try {
@@ -64,7 +30,8 @@ function App() {
     const totalMarginsVertical = parseFloat(cs.marginTop) + parseFloat(cs.marginBottom);
 
     // Use scrollHeight/scrollWidth to get full content size including overflow
-    const width = Math.max(300, Math.ceil(rect.width));
+    //const width = Math.max(cs.maxWidth + cs.marginRight+cs.marginLeft);
+    const width = Math.max(300 + 40);
     const height = Math.max(150, Math.ceil(rect.height) )
       + totalMarginsVertical;
     console.log(totalMarginsVertical)
@@ -108,39 +75,7 @@ function App() {
         <button className="close-button" onClick={closeApp}>×</button>
       </header>
       <main className="container">
-        <div className="task-list">
-          {tasks.map(task => (
-            <div key={task.id} className="task-item">
-              <input
-                type="checkbox"
-                id={`task-${task.id}`}
-                checked={task.status === "completed"}
-                onChange={() => toggleTask(task.id)}
-              />
-              {editingTaskId === task.id ? (
-                <div className="edit-container">
-                  <input
-                    type="text"
-                    value={editText}
-                    onChange={(e) => setEditText(e.target.value)}
-                    onKeyDown={(e) => handleKeyPress(e, task.id)}
-                    className="edit-input"
-                    autoFocus
-                  />
-                  <button onClick={() => saveEdit(task.id)} className="save-button">✓</button>
-                  <button onClick={cancelEdit} className="cancel-button">✕</button>
-                </div>
-              ) : (
-                <div className="task-content">
-                  <label htmlFor={`task-${task.id}`} className={task.status === "completed" ? 'completed' : ''}>
-                    {task.text}
-                  </label>
-                  <button onClick={() => startEdit(task.id, task.text)} className="edit-button">✏️</button>
-                </div>
-              )}
-            </div>
-          ))}
-        </div>
+        <TaskContainer tasks={tasks} onTasksChange={setTasks} />
       </main>
     </div>
   );
