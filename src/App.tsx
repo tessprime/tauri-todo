@@ -1,19 +1,15 @@
 import { useState, useEffect, useRef } from "react";
 import { getCurrentWindow, LogicalSize } from "@tauri-apps/api/window";
+import { commands, type Model } from "./bindings";
 import "./App.css";
 
 function App() {
-  const [tasks, setTasks] = useState([
-    { id: 1, text: "Task A", completed: false },
-    { id: 2, text: "Task B", completed: false },
-    { id: 3, text: "Task C", completed: false },
-    { id: 4, text: "Task D", completed: false }
-  ]);
+  const [tasks, setTasks] = useState<Model[]>([]);
   const containerRef = useRef<HTMLDivElement>(null);
 
   const toggleTask = (id: number) => {
     setTasks(tasks.map(task => 
-      task.id === id ? { ...task, completed: !task.completed } : task
+      task.id === id ? { ...task, status: task.status === "completed" ? "pending" : "completed" } : task
     ));
   };
 
@@ -54,6 +50,24 @@ function App() {
   };
 
   useEffect(() => {
+    const loadTasks = async () => {
+      try {
+        const result = await commands.getAllTasks();
+        if (result.status === "ok") {
+          setTasks(result.data);
+          console.log(result.data);
+        } else {
+          console.error("Failed to load tasks:", result.error);
+        }
+      } catch (error) {
+        console.error("Error loading tasks:", error);
+      }
+    };
+
+    loadTasks();
+  }, []);
+
+  useEffect(() => {
     resizeWindow();
   }, [tasks]);
 
@@ -70,10 +84,10 @@ function App() {
               <input
                 type="checkbox"
                 id={`task-${task.id}`}
-                checked={task.completed}
+                checked={task.status === "completed"}
                 onChange={() => toggleTask(task.id)}
               />
-              <label htmlFor={`task-${task.id}`} className={task.completed ? 'completed' : ''}>
+              <label htmlFor={`task-${task.id}`} className={task.status === "completed" ? 'completed' : ''}>
                 {task.text}
               </label>
             </div>
