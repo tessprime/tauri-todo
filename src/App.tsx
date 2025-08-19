@@ -59,7 +59,7 @@ function App() {
 
   return (
     <div ref={containerRef}>
-      <header className="app-header">
+      <header className="app-header" data-tauri-drag-region>
         <h1>Todo Tauri</h1>
         <button className="close-button" onClick={closeApp}>×</button>
       </header>
