@@ -5041,6 +5041,7 @@ dependencies = [
  "serde",
  "serde_json",
  "specta",
+ "specta-typescript",
  "tauri",
  "tauri-specta-macros",
  "thiserror 2.0.14",
