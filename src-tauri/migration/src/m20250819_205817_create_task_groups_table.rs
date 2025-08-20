@@ -1,4 +1,5 @@
 use sea_orm_migration::{prelude::*, schema::*};
+use chrono::Utc;
 
 #[derive(DeriveMigrationName)]
 pub struct Migration;
@@ -16,7 +17,18 @@ impl MigrationTrait for Migration {
                     .col(timestamp_with_time_zone(TaskGroups::CreateDate))
                     .to_owned(),
             )
-            .await
+            .await?;
+
+        // Insert default group
+        let insert = Query::insert()
+            .into_table(TaskGroups::Table)
+            .columns([TaskGroups::Name, TaskGroups::CreateDate])
+            .values_panic(["default".into(), chrono::Utc::now().to_rfc3339().into()])
+            .to_owned();
+
+        manager.exec_stmt(insert).await?;
+
+        Ok(())
     }
 
     async fn down(&self, manager: &SchemaManager) -> Result<(), DbErr> {

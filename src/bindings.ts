@@ -15,6 +15,14 @@ async getAllTasks() : Promise<Result<Model[], string>> {
     if(e instanceof Error) throw e;
     else return { status: "error", error: e  as any };
 }
+},
+async getTasksByGroup(groupName: string) : Promise<Result<Model[], string>> {
+    try {
+    return { status: "ok", data: await TAURI_INVOKE("get_tasks_by_group", { groupName }) };
+} catch (e) {
+    if(e instanceof Error) throw e;
+    else return { status: "error", error: e  as any };
+}
 }
 }
 

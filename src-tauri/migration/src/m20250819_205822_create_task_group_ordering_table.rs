@@ -42,7 +42,52 @@ impl MigrationTrait for Migration {
                     )
                     .to_owned(),
             )
-            .await
+            .await?;
+
+        // Insert sample "hello world" task
+        let insert_task = Query::insert()
+            .into_table(Tasks::Table)
+            .columns([Tasks::Text, Tasks::CreateDate, Tasks::Status])
+            .values_panic([
+                "Hello World".into(),
+                chrono::Utc::now().to_rfc3339().into(),
+                "pending".into()
+            ])
+            .to_owned();
+
+        manager.exec_stmt(insert_task).await?;
+        
+        let insert_task = Query::insert()
+            .into_table(Tasks::Table)
+            .columns([Tasks::Text, Tasks::CreateDate, Tasks::Status])
+            .values_panic([
+                "Hello World 2".into(),
+                chrono::Utc::now().to_rfc3339().into(),
+                "pending".into()
+            ])
+            .to_owned();
+
+        manager.exec_stmt(insert_task).await?;
+
+        // Add the task to the default group (assuming default group has ID 1)
+        let insert_ordering = Query::insert()
+            .into_table(TaskGroupOrdering::Table)
+            .columns([TaskGroupOrdering::TaskId, TaskGroupOrdering::TaskGroupId, TaskGroupOrdering::OrderIndex])
+            .values_panic([1.into(), 1.into(), 0.into()])
+            .to_owned();
+        
+
+        manager.exec_stmt(insert_ordering).await?;
+
+        let insert_ordering = Query::insert()
+            .into_table(TaskGroupOrdering::Table)
+            .columns([TaskGroupOrdering::TaskId, TaskGroupOrdering::TaskGroupId, TaskGroupOrdering::OrderIndex])
+            .values_panic([2.into(), 1.into(), 1.into()])
+            .to_owned();
+
+        manager.exec_stmt(insert_ordering).await?;
+
+        Ok(())
     }
 
     async fn down(&self, manager: &SchemaManager) -> Result<(), DbErr> {
