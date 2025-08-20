@@ -9,13 +9,11 @@ impl MigrationTrait for Migration {
         manager
             .create_table(
                 Table::create()
-                    .table(Tasks::Table)
+                    .table(TaskGroups::Table)
                     .if_not_exists()
-                    .col(pk_auto(Tasks::Id))
-                    .col(string(Tasks::Text))
-                    .col(timestamp_with_time_zone(Tasks::CreateDate))
-                    .col(timestamp_with_time_zone_null(Tasks::CompleteDate))
-                    .col(string(Tasks::Status))
+                    .col(pk_auto(TaskGroups::Id))
+                    .col(string(TaskGroups::Name))
+                    .col(timestamp_with_time_zone(TaskGroups::CreateDate))
                     .to_owned(),
             )
             .await
@@ -23,17 +21,15 @@ impl MigrationTrait for Migration {
 
     async fn down(&self, manager: &SchemaManager) -> Result<(), DbErr> {
         manager
-            .drop_table(Table::drop().table(Tasks::Table).to_owned())
+            .drop_table(Table::drop().table(TaskGroups::Table).to_owned())
             .await
     }
 }
 
 #[derive(DeriveIden)]
-pub enum Tasks {
+pub enum TaskGroups {
     Table,
     Id,
-    Text,
+    Name,
     CreateDate,
-    CompleteDate,
-    Status,
 }

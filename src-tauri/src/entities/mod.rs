@@ -2,4 +2,6 @@
 
 pub mod prelude;
 
+pub mod task_group_ordering;
+pub mod task_groups;
 pub mod tasks;
