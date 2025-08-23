@@ -14,7 +14,7 @@ fn greet(name: &str) -> String {
 #[cfg_attr(mobile, tauri::mobile_entry_point)]
 pub fn run() {
     let builder = Builder::<tauri::Wry>::new()
-        .commands(collect_commands![greet, db::tasks::get_all_tasks, db::tasks::get_tasks_by_group]);
+        .commands(collect_commands![greet, db::tasks::get_all_tasks, db::tasks::get_tasks_by_group, db::tasks::get_all_task_groups]);
 
     #[cfg(debug_assertions)]
     {

@@ -8,7 +8,7 @@ export const commands = {
 async greet(name: string) : Promise<string> {
     return await TAURI_INVOKE("greet", { name });
 },
-async getAllTasks() : Promise<Result<Model[], string>> {
+async getAllTasks() : Promise<Result<TaskWithOrder[], string>> {
     try {
     return { status: "ok", data: await TAURI_INVOKE("get_all_tasks") };
 } catch (e) {
@@ -16,9 +16,17 @@ async getAllTasks() : Promise<Result<Model[], string>> {
     else return { status: "error", error: e  as any };
 }
 },
-async getTasksByGroup(groupName: string) : Promise<Result<Model[], string>> {
+async getTasksByGroup(groupName: string) : Promise<Result<TaskWithOrder[], string>> {
     try {
     return { status: "ok", data: await TAURI_INVOKE("get_tasks_by_group", { groupName }) };
+} catch (e) {
+    if(e instanceof Error) throw e;
+    else return { status: "error", error: e  as any };
+}
+},
+async getAllTaskGroups() : Promise<Result<TaskGroupModel[], string>> {
+    try {
+    return { status: "ok", data: await TAURI_INVOKE("get_all_task_groups") };
 } catch (e) {
     if(e instanceof Error) throw e;
     else return { status: "error", error: e  as any };
@@ -36,7 +44,8 @@ async getTasksByGroup(groupName: string) : Promise<Result<Model[], string>> {
 
 /** user-defined types **/
 
-export type Model = { id: number; text: string; create_date: string; complete_date: string | null; status: string }
+export type TaskGroupModel = { id: number; name: string; create_date: string }
+export type TaskWithOrder = { id: number; text: string; create_date: string; complete_date: string | null; status: string; order_index: number }
 
 /** tauri-specta globals **/
 

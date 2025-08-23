@@ -1,7 +1,7 @@
 import { useState } from "react";
-import { type Model } from "../../bindings";
+import { type TaskModel } from "../../bindings";
 
-export function useTaskDrag(tasks: Model[], onTasksChange: (tasks: Model[]) => void) {
+export function useTaskDrag(tasks: TaskModel[], onTasksChange: (tasks: TaskModel[]) => void) {
   const [draggedTaskId, setDraggedTaskId] = useState<number | null>(null);
   const [dragOverTaskId, setDragOverTaskId] = useState<number | null>(null);
 

@@ -6,6 +6,7 @@ use specta::Type;
 
 #[derive(Clone, Debug, PartialEq, DeriveEntityModel, Eq, Serialize, Deserialize, Type)]
 #[sea_orm(table_name = "tasks")]
+#[specta(rename = "TaskModel")]
 pub struct Model {
     #[sea_orm(primary_key)]
     pub id: i32,

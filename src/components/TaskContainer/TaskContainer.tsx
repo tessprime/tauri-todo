@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { type Model } from "../../bindings";
+import { type TaskModel } from "../../bindings";
 import TaskItem from "../TaskItem";
 import { useTaskToggle, useTaskEdit, type TaskContainerProps } from "../TaskItem/hooks";
 import { useTaskDrag } from "./hooks";
@@ -24,7 +24,7 @@ export default function TaskContainer({ tasks, onTasksChange }: TaskContainerPro
 
   const saveNewTask = () => {
     if (newTaskText.trim()) {
-      const newTask: Model = {
+      const newTask: TaskModel = {
         id: Math.max(...tasks.map(t => t.id), 0) + 1,
         text: newTaskText.trim(),
         status: "pending",

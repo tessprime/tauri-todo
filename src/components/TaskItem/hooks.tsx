@@ -1,8 +1,8 @@
 import { useState } from "react";
-import { type Model } from "../../bindings";
+import { type TaskModel } from "../../bindings";
 
 export interface TaskItemProps {
-  task: Model;
+  task: TaskModel;
   isEditing: boolean;
   editText: string;
   isDragging: boolean;
@@ -20,11 +20,11 @@ export interface TaskItemProps {
 }
 
 export interface TaskContainerProps {
-  tasks: Model[];
-  onTasksChange: (tasks: Model[]) => void;
+  tasks: TaskModel[];
+  onTasksChange: (tasks: TaskModel[]) => void;
 }
 
-export function useTaskToggle(tasks: Model[], onTasksChange: (tasks: Model[]) => void) {
+export function useTaskToggle(tasks: TaskModel[], onTasksChange: (tasks: TaskModel[]) => void) {
   const toggleTask = (id: number) => {
     const updatedTasks = tasks.map(task => 
       task.id === id ? { ...task, status: task.status === "completed" ? "pending" : "completed" } : task
@@ -35,7 +35,7 @@ export function useTaskToggle(tasks: Model[], onTasksChange: (tasks: Model[]) =>
   return { toggleTask };
 }
 
-export function useTaskEdit(tasks: Model[], onTasksChange: (tasks: Model[]) => void) {
+export function useTaskEdit(tasks: TaskModel[], onTasksChange: (tasks: TaskModel[]) => void) {
   const [editingTaskId, setEditingTaskId] = useState<number | null>(null);
   const [editText, setEditText] = useState<string>("");
 

@@ -1,12 +1,14 @@
 import { useState, useEffect, useRef } from "react";
 import { getCurrentWindow, LogicalSize } from "@tauri-apps/api/window";
-import { type Model } from "./bindings";
+import { type TaskModel, type TaskGroupModel } from "./bindings";
 import TaskContainer from "./components/TaskContainer";
 import { TasksService } from "./services/TasksService";
 import "./App.css";
 
 function App() {
-  const [tasks, setTasks] = useState<Model[]>([]);
+  const [tasks, setTasks] = useState<TaskModel[]>([]);
+  const [taskGroups, setTaskGroups] = useState<TaskGroupModel[]>([]);
+  const [selectedGroupName, setSelectedGroupName] = useState<string>("default");
   const containerRef = useRef<HTMLDivElement>(null);
 
 
@@ -48,9 +50,22 @@ function App() {
   };
 
   useEffect(() => {
+    const loadTaskGroups = async () => {
+      try {
+        const groups = await TasksService.getAllTaskGroups();
+        setTaskGroups(groups);
+      } catch (error) {
+        console.error("Error loading task groups:", error);
+      }
+    };
+
+    loadTaskGroups();
+  }, []);
+
+  useEffect(() => {
     const loadTasks = async () => {
       try {
-        const tasks = await TasksService.getAllTasks();
+        const tasks = await TasksService.getTasksByGroup(selectedGroupName);
         setTasks(tasks);
       } catch (error) {
         console.error("Error loading tasks:", error);
@@ -58,7 +73,7 @@ function App() {
     };
 
     loadTasks();
-  }, []);
+  }, [selectedGroupName]);
 
   useEffect(() => {
     resizeWindow();
@@ -70,6 +85,20 @@ function App() {
         <h1>Todo Tauri</h1>
         <button className="close-button" onClick={closeApp}>×</button>
       </header>
+      <div className="task-group-selector">
+        <label htmlFor="group-select">Task Group:</label>
+        <select 
+          id="group-select"
+          value={selectedGroupName} 
+          onChange={(e) => setSelectedGroupName(e.target.value)}
+        >
+          {taskGroups.map(group => (
+            <option key={group.id} value={group.name}>
+              {group.name}
+            </option>
+          ))}
+        </select>
+      </div>
       <main className="container">
         <TaskContainer tasks={tasks} onTasksChange={setTasks} />
       </main>

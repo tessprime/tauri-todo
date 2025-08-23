@@ -41,6 +41,30 @@
   background-color: #991b1b;
 }
 
+.task-group-selector {
+  padding: 12px 20px;
+  background-color: #f3f4f6;
+  border-bottom: 1px solid #e5e7eb;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.task-group-selector label {
+  font-size: 14px;
+  font-weight: 500;
+  color: #374151;
+}
+
+.task-group-selector select {
+  padding: 4px 8px;
+  border: 1px solid #d1d5db;
+  border-radius: 4px;
+  background-color: white;
+  font-size: 14px;
+  color: #374151;
+}
+
 .logo.vite:hover {
   filter: drop-shadow(0 0 2em #747bff);
 }
@@ -206,6 +230,21 @@ button {
   .new-task {
     border-color: #4b5563;
     background-color: rgba(55, 65, 81, 0.1);
+  }
+
+  .task-group-selector {
+    background-color: #374151;
+    border-bottom-color: #4b5563;
+  }
+
+  .task-group-selector label {
+    color: #d1d5db;
+  }
+
+  .task-group-selector select {
+    background-color: #1f2937;
+    border-color: #4b5563;
+    color: #d1d5db;
   }
 
 }
