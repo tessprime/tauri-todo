@@ -14,6 +14,7 @@ export interface TaskItemProps {
   onEditTextChange: (text: string) => void;
   onDragStart: (e: React.DragEvent, taskId: number) => void;
   onDragOver: (e: React.DragEvent, taskId: number) => void;
+  onDragEnter: (e: React.DragEvent, taskId: number) => void;
   onDragLeave: () => void;
   onDrop: (e: React.DragEvent, taskId: number) => void;
   onDragEnd: () => void;

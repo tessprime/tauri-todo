@@ -37,6 +37,11 @@
   background-color: #b91c1c;
 }
 
+/* debug: outline all window-drag regions */
+[data-tauri-drag-region] { outline: 2px solid magenta !important; }
+/* and anything using the CSS-based version */
+*[style*="-webkit-app-region: drag"] { outline: 8px dashed orange !important; }
+
 .close-button:active {
   background-color: #991b1b;
 }

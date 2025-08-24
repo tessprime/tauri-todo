@@ -10,7 +10,14 @@ export default function TaskContainer({ tasks, onTasksChange }: TaskContainerPro
 
   const { toggleTask } = useTaskToggle(tasks, onTasksChange);
   const { editingTaskId, editText, startEdit, cancelEdit, saveEdit, setEditText } = useTaskEdit(tasks, onTasksChange);
-  const { draggedTaskId, dragOverTaskId, handleDragStart, handleDragOver, handleDragLeave, handleDrop, handleDragEnd } = useTaskDrag(tasks, onTasksChange);
+  const { draggedTaskId, 
+    dragOverTaskId,
+    handleDragEnter,
+    handleDragStart, 
+    handleDragOver,
+    handleDragLeave, 
+    handleDrop, 
+    handleDragEnd } = useTaskDrag(tasks, onTasksChange);
 
   const startCreateNew = () => {
     setIsCreatingNew(true);
@@ -80,6 +87,7 @@ export default function TaskContainer({ tasks, onTasksChange }: TaskContainerPro
           onCancelEdit={cancelEdit}
           onEditTextChange={setEditText}
           onDragStart={handleDragStart}
+          onDragEnter={handleDragEnter}
           onDragOver={handleDragOver}
           onDragLeave={handleDragLeave}
           onDrop={handleDrop}
