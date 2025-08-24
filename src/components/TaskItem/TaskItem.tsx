@@ -29,7 +29,7 @@ export default function TaskItem({
       onCancelEdit();
     }
   };
-  console.log("blotrg", onDragOver)
+
   return (
     <div>
       <TaskDragTarget

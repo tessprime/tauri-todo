@@ -8,40 +8,6 @@ import "./App.css";
 
 import React from "react";
 
-function Demo() {
-  const [dragging, setDragging] = React.useState(false);
-
-  return (
-    <div style={{ display: "flex", gap: 24 }}>
-      {/* DRAG SOURCE */}
-      <div
-        draggable
-        onDragStart={(e) => {
-          console.log("hey")
-          e.dataTransfer.setData("text/plain", "42"); // required in Safari
-          e.dataTransfer.effectAllowed = "move";
-          setDragging(true);
-        }}
-        onDragEnd={() => {console.log("doom");setDragging(false)}}
-        style={{ width: 120, height: 120, border: "2px solid #999", display: "grid", placeItems: "center" }}
-      >
-        Drag me
-      </div>
-
-      {/* DROP TARGET (separate element) */}
-      <div
-        onDragEnter={(e) => { e.preventDefault(); console.log("enter")}}
-        onDragOver={(e) => { e.preventDefault(); console.log("over"); }}
-        onDrop={(e) => { e.preventDefault(); console.log("drop", e.dataTransfer.getData("text/plain")); }}
-        style={{ width: 200, height: 200, border: "2px dashed #c00", display: "grid", placeItems: "center" }}
-      >
-        Target
-      </div>
-    </div>
-  );
-}
-
-
 function App() {
   const [tasks, setTasks2] = useState<TaskModel[]>([]);
   const [taskGroups, setTaskGroups] = useState<TaskGroupModel[]>([]);
@@ -144,7 +110,6 @@ function App() {
       </div>
       <main className="container">
         <TaskContainer tasks={tasks} onTasksChange={setTasks} />
-        <Demo></Demo>
       </main>
     </div>
   );
